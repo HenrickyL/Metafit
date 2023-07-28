@@ -1,0 +1,35 @@
+{
+  "module": "es6",
+  "moduleResolution": "node",
+  "compilerOptions": {
+    "lib": ["es6"],
+    "module": "commonjs",
+    "target": "es2017",
+    "sourceMap": true,    
+    "allowJs": true,                
+    "removeComments": true,               
+    "esModuleInterop": true,                 
+    "skipLibCheck": true,  
+    "outDir": "dist",                  
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "pretty": true,
+    "resolveJsonModule": true,
+    "types": ["node", "jest"],
+    "typeRoots": ["./node_modules/@types"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "paths": {
+      // "*": ["./"],
+      "@modules/*":     ["./app/Modules/*"],
+      "@core/*":        ["./app/core/*"],
+      "@infra/*":       ["./app/infra/*"],
+      "@config/*":      ["./config/*"],
+    },
+    "plugins": [
+      { "transform": "ts-auto-mock/transformer", "cacheBetweenTests": false }
+    ]    
+  }
+}

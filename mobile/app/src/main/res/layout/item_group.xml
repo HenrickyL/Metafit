@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginBottom="8dp"
+    >
+
+    <ImageView
+            android:id="@+id/groupBackgroundImage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:alpha="0.9"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/base_group_bg1" />
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
+        <TextView
+                android:id="@+id/g_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Título do Grupo"
+                android:textSize="32dp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:layout_centerInParent="true"
+                />
+
+        <TextView
+                android:id="@+id/groupMembersTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10 membros"
+                android:textColor="@color/textPrimary"
+                android:textSize="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp" />
+
+        <ImageView
+                android:id="@+id/groupIconImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/icon_private"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp" />
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>
+

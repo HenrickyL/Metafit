@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+                android:id="@+id/menu_createGroup"
+                android:title="@string/menu_create_group"
+                />
+        <item
+                android:id="@+id/menu_editGroup"
+                android:title="@string/menu_edit_group"
+                />
+        <item
+                android:id="@+id/menu_goal"
+                android:title="@string/menu_tab_goal"
+                >
+                <menu>
+                        <item
+                                android:id="@+id/menu_goal_create_goal"
+                                android:title="@string/menu_goal_create"
+                                />
+                </menu>
+        </item>
+</menu>

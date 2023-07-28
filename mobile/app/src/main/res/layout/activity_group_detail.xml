@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.GroupDetailActivity">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:menu="@menu/menu_group_details"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+    <RelativeLayout
+            android:id="@+id/div_name_favorite"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp">
+        <LinearLayout
+                android:id="@+id/header_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <TextView
+                    android:id="@+id/tvGroupName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome do Grupo"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true" />
+            <!-- Ícones das Categorias -->
+            <!-- TODO: add os icones das categorias aqui  -->
+            <LinearLayout
+                    android:id="@+id/llCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/tvGroupName"
+                    android:layout_marginStart="8dp">
+
+                <ImageView
+                        android:id="@+id/ivCategory1"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_user" />
+
+                <ImageView
+                        android:id="@+id/ivCategory2"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_email"
+                        android:layout_marginStart="8dp" />
+
+                <!-- Adicione mais ImageViews para as outras categorias -->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <ImageView
+                android:id="@+id/ivFavorite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/icon_favorite_out"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+        <!-- Descrição do Grupo -->
+
+        <TextView
+                android:id="@+id/tvGroupDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição do Grupo"
+                android:layout_below="@+id/header_group"
+                android:layout_marginTop="16dp" />
+
+    </RelativeLayout>
+    <RelativeLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/div_name_favorite">
+
+        <!--TabLayout para mostrar os membros, goals, convites enviados e recebidos -->
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:tabIndicatorColor="@color/secondary"
+                app:tabSelectedTextColor="@color/secondary"
+                app:tabTextColor="@color/textSecondary"
+                app:tabMode="fixed"
+                app:tabGravity="fill"/>
+
+        <!--ViewPager para conter os fragmentos relacionados a cada aba-->
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tabLayout" />
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

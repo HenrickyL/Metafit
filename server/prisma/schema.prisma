@@ -1,0 +1,185 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//@map("_id")
+model User { //Usuario
+  id                                String              @id @default(uuid())
+  name                              String              
+  username                          String              @unique
+  email                             String              @unique
+  password                          String          
+  imageUrl                          String?             // Campo para armazenar a URL da imagem
+
+  createdAt                         DateTime            @default(now())
+  updatedAt                         DateTime            @updatedAt
+
+  groups                            GroupMember[]       @relation("GroupMembers")
+  goals                             Goal[]              @relation("UserGoals")
+  groupsOwned                       Group[]             @relation("GroupOwner")
+  goalsCreatedByMe                  Goal[]              @relation("GoalCreatedBy")
+  achievements                      Achievement[]
+  sendedInvites                     Invite[]            @relation("UserInvitesSend")
+  receivedInvites                   Invite[]            @relation("UserInvitesReceived")
+  favoritedGroups                   Group[]             @relation("GroupFavoritedBy")
+  goalsFavoritedBy                  Goal[]              @relation("GoalFavoritedBy")
+}
+
+model Group { //Grupo
+  id                                String              @id @default(uuid()) 
+  name                              String        
+  description                       String        
+  ownerId                           String  
+  isPrivate                         Boolean             @default(false)
+  password                          String?            
+  imageUrl                          String?
+  createdAt                         DateTime            @default(now())
+  updatedAt                         DateTime            @updatedAt
+
+  owner                             User                @relation("GroupOwner", fields: [ownerId], references: [id])
+  members                           GroupMember[]       @relation("GroupMembers")
+  goals                             Goal[]              @relation("GroupGoals")
+  achievements                      Achievement[]       @relation("GroupAchievements")
+  sendedGroupInvites                Invite[]            @relation("GroupInvitesSend")
+  receivedGroupInvites              Invite[]            @relation("GroupInvitesReceived")
+  categories                        GroupCategory[]     @relation("GroupCategories")
+  favoritedBy                       User[]              @relation("GroupFavoritedBy")
+}
+
+model Goal { // Objetivo
+  id                                String              @id @default(uuid()) 
+  groupId                           String                       
+  createdById                       String                      
+  title                             String          
+  description                       String
+  categoryId                        Int          
+  target                            Int         
+  progress                          Int                 @default(0)         
+  createdAt                         DateTime            @default(now())
+  updatedAt                         DateTime            @updatedAt
+  type                              GoalType                              // Tipo de meta (uma vez ou recorrente)
+  recurrence                        Recurrence?                           // Recorrência da meta (diária, semanal, mensal)
+  frequency                         Int?                                  // Frequência da meta (por exemplo, quantidade de vezes por mês)
+  startDate                         DateTime?            @default(now())  // Data de início da meta
+  endDate                           DateTime?                             // Data de término da meta
+
+  createdBy                         User                @relation("GoalCreatedBy", fields: [createdById], references: [id])
+  group                             Group               @relation("GroupGoals", fields: [groupId], references: [id])
+  achievements                      Achievement[]       
+  users                             User[]              @relation("UserGoals")  
+  favoritedBy                       User[]              @relation("GoalFavoritedBy")
+  invitesSent                       Invite[]            @relation("GoalInvitesSent")
+  invitesReceived                   Invite[]            @relation("GoalInvitesReceived")
+  category                          Category            @relation("GoalCategory", fields: [categoryId], references: [id])
+}
+
+enum GoalType {
+  ONCE      // Meta uma vez
+  RECURRING // Meta recorrente
+}
+
+enum Recurrence {
+  DAILY    // Diariamente
+  WEEKLY   // Semanalmente
+  MONTHLY  // Mensalmente
+}
+
+model Achievement { //Conquista
+  id                                String              @id @default(uuid()) 
+  userId                            String                      
+  groupId                           String                       
+  goalId                            String                 
+  title                             String          
+  description                       String          
+  createdAt                         DateTime            @default(now())
+  user                              User                @relation(fields: [userId], references: [id])
+  groups                            Group[]             @relation("GroupAchievements")
+  goal                              Goal                @relation(fields: [goalId], references: [id])
+}
+
+model GroupMember {
+  id                                String              @id @default(uuid())
+  groupId                           String              
+  userId                            String              
+  createdAt                         DateTime            @default(now())
+
+  group                             Group               @relation("GroupMembers",fields: [groupId], references: [id])
+  user                              User                @relation("GroupMembers",fields: [userId], references: [id])
+}
+
+model Category {
+  id                                Int                 @id @default(autoincrement())
+  name                              String
+  imageUrl                          String?
+  groups                            GroupCategory[]     @relation("GroupCategories")
+  goals                             Goal[]              @relation("GoalCategory")
+}
+
+model GroupCategory {
+  id                                Int                 @id @default(autoincrement())
+  groupId                           String
+  categoryId                        Int
+
+  group                             Group                @relation("GroupCategories", fields: [groupId], references: [id])
+  category                          Category             @relation("GroupCategories", fields: [categoryId], references: [id])
+}
+
+model Invite {
+  id                                String              @id @default(uuid())
+  type                              InviteType          // Pode ser 'friendship', 'group_request', 'group_invitation', ou outros tipos
+  status                            InviteStatus
+  senderId                          String              // ID do usuário que enviou o convite
+  receiverId                        String              // ID do usuário que recebeu o convite
+  senderGroupId                     String?             // ID do grupo que enviou o convite
+  receiverGroupId                   String?             // ID do grupo que recebeu o convite
+  senderGoalId                      String?             // ID do Goal que enviou o convite
+  receiverGoalId                    String?             // ID do Goal que recebeu o convite
+  expiration                        DateTime
+
+  createdAt                         DateTime            @default(now())
+  updatedAt                         DateTime            @updatedAt
+
+
+  // Relações
+  sender                            User?               @relation("UserInvitesSend", fields: [senderId], references: [id])
+  receiver                          User?               @relation("UserInvitesReceived", fields: [receiverId], references: [id])
+  senderGroup                       Group?              @relation("GroupInvitesSend", fields: [senderGroupId], references: [id])
+  receiverGroup                     Group?              @relation("GroupInvitesReceived", fields: [receiverGroupId], references: [id])
+  senderGoal                        Goal?               @relation("GoalInvitesSent", fields: [senderGoalId], references: [id])
+  receiverGoal                      Goal?               @relation("GoalInvitesReceived", fields: [receiverGoalId], references: [id])
+}
+
+
+enum InviteType {
+  FRIENDSHIP
+  GROUP_REQUEST
+  GROUP_INVITATION
+  GOAL_REQUEST
+  GOAL_INVITATION
+}
+
+enum InviteStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+}
+
+// model Notification {
+//   id          String    @id @default(uuid())
+//   userId      String
+//   groupId     String
+//   goalId      String?
+//   achievementId String?
+//   isRead      Boolean   @default(false)
+//   createdAt   DateTime  @default(now())
+
+//   user        User      @relation(fields: [userId], references: [id])
+//   group       Group     @relation(fields: [groupId], references: [id])
+//   goal        Goal?     @relation(fields: [goalId], references: [id])
+//   achievement Achievement? @relation(fields: [achievementId], references: [id])
+// }
